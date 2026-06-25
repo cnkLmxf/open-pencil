@@ -12,6 +12,7 @@ function createProviderSettingsContext() {
     customBaseURL,
     customModelID,
     customAPIType,
+    customHeaders,
     maxOutputTokens,
     pexelsApiKey,
     unsplashAccessKey
@@ -23,6 +24,7 @@ function createProviderSettingsContext() {
   const unsplashKeyInput = ref('')
   const baseURLInput = ref(customBaseURL.value)
   const customModelInput = ref(customModelID.value)
+  const customHeadersInput = ref(customHeaders.value)
   const hasExistingKey = ref(!!apiKey.value)
   const hasExistingPexelsKey = ref(!!pexelsApiKey.value)
   const hasExistingUnsplashKey = ref(!!unsplashAccessKey.value)
@@ -32,6 +34,7 @@ function createProviderSettingsContext() {
     hasExistingKey.value = !!apiKey.value
     baseURLInput.value = customBaseURL.value
     customModelInput.value = customModelID.value
+    customHeadersInput.value = customHeaders.value
   })
 
   function save() {
@@ -55,6 +58,9 @@ function createProviderSettingsContext() {
     }
     if (providerDef.value.supportsCustomModel) {
       customModelID.value = customModelInput.value.trim()
+    }
+    if (providerDef.value.supportsCustomHeaders) {
+      customHeaders.value = customHeadersInput.value.trim()
     }
   }
 
@@ -88,6 +94,7 @@ function createProviderSettingsContext() {
     customAPIType,
     customBaseURL,
     customModelID,
+    customHeaders,
     maxOutputTokens,
     pexelsApiKey,
     unsplashAccessKey,
@@ -97,6 +104,7 @@ function createProviderSettingsContext() {
     unsplashKeyInput,
     baseURLInput,
     customModelInput,
+    customHeadersInput,
     hasExistingKey,
     hasExistingPexelsKey,
     hasExistingUnsplashKey,

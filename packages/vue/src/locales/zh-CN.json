@@ -325,6 +325,8 @@
     "getUnsplashAccessKey": "获取免费 Unsplash Access Key →",
     "completions": "Completions",
     "responses": "Responses",
+    "customHeaders": "自定义 Headers",
+    "customHeadersHint": "随每次请求发送的自定义 HTTP 头，JSON 对象格式",
     "copiedExclamation": "已复制！",
     "copyMessage": "复制消息",
     "copyJSXReference": "复制 JSX 属性参考到剪贴板",

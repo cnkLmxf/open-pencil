@@ -324,7 +324,7 @@
     "getPexelsAPIKey": "Obtener clave a la API gratis de Pexels →",
     "getUnsplashAccessKey": "Obtener clave a la API gratis de Unsplash →",
     "completions": "Completados",
-    "responses": "Respuestas",
+    "responses": "Respuestas",\n    "customHeaders": "Headers personalizados",\n    "customHeadersHint": "Objeto JSON con headers HTTP personalizados enviados con cada solicitud",
     "copiedExclamation": "¡Copiado!",
     "copyMessage": "Copiar mensaje",
     "copyJSXReference": "Copiar referencia de props JSX al portapapeles",

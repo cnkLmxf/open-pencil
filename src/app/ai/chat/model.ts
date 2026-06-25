@@ -14,6 +14,7 @@ export type ModelConfig = {
   customModelID: string
   customBaseURL: string
   customAPIType: 'completions' | 'responses'
+  customHeaders: string
 }
 
 export function resolveLanguageModelID(
@@ -29,6 +30,21 @@ export function resolveLanguageModelID(
 
 export function createLanguageModel(config: ModelConfig): LanguageModel {
   const effectiveModelID = resolveLanguageModelID(config)
+
+  let customHeadersObj: Record<string, string> = {}
+  if (config.customHeaders.trim()) {
+    try {
+      const parsed = JSON.parse(config.customHeaders.trim())
+      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+        customHeadersObj = Object.fromEntries(
+          Object.entries(parsed).filter(([, v]) => typeof v === 'string')
+        )
+      }
+    } catch {
+      // Invalid JSON — silently ignore, no custom headers applied
+    }
+  }
+  const hasCustomHeaders = Object.keys(customHeadersObj).length > 0
 
   switch (config.providerID) {
     case 'openrouter': {
@@ -74,7 +90,8 @@ export function createLanguageModel(config: ModelConfig): LanguageModel {
     case 'openai-compatible': {
       const custom = createOpenAI({
         apiKey: config.apiKey,
-        baseURL: config.customBaseURL
+        baseURL: config.customBaseURL,
+        ...(hasCustomHeaders && { headers: customHeadersObj })
       })
       return config.customAPIType === 'responses'
         ? custom.responses(effectiveModelID)
@@ -83,7 +100,8 @@ export function createLanguageModel(config: ModelConfig): LanguageModel {
     case 'anthropic-compatible': {
       const custom = createAnthropic({
         apiKey: config.apiKey,
-        baseURL: config.customBaseURL
+        baseURL: config.customBaseURL,
+        ...(hasCustomHeaders && { headers: customHeadersObj })
       })
       return custom(effectiveModelID)
     }

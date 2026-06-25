@@ -369,6 +369,8 @@ export const dialogMessages = i18n('dialogs', {
   getUnsplashAccessKey: 'Get free Unsplash access key →',
   completions: 'Completions',
   responses: 'Responses',
+  customHeaders: 'Custom Headers',
+  customHeadersHint: 'JSON object with custom HTTP headers sent with every request',
   yourName: 'Your name',
   enterYourName: 'Enter your name',
   shareThisFile: 'Share this file',

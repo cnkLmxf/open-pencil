@@ -199,6 +199,7 @@ export interface AIProviderDef {
   defaultModel: string
   supportsCustomBaseURL?: boolean
   supportsCustomModel?: boolean
+  supportsCustomHeaders?: boolean
 }
 
 export const AI_PROVIDERS: AIProviderDef[] = [
@@ -318,7 +319,8 @@ export const AI_PROVIDERS: AIProviderDef[] = [
     defaultModel: '',
     models: [],
     supportsCustomBaseURL: true,
-    supportsCustomModel: true
+    supportsCustomModel: true,
+    supportsCustomHeaders: true
   },
   {
     id: 'anthropic-compatible',
@@ -328,7 +330,8 @@ export const AI_PROVIDERS: AIProviderDef[] = [
     defaultModel: '',
     models: [],
     supportsCustomBaseURL: true,
-    supportsCustomModel: true
+    supportsCustomModel: true,
+    supportsCustomHeaders: true
   }
 ]
 

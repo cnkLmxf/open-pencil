@@ -9,7 +9,7 @@ import { ACP_AGENTS } from '@open-pencil/core/constants'
 import { openExternalLink } from '@/app/shell/ui'
 import { useI18n } from '@open-pencil/vue'
 
-const { providerID, providerDef, setAPIKey, customBaseURL, customModelID } = useAIChat()
+const { providerID, providerDef, setAPIKey, customBaseURL, customModelID, customHeaders } = useAIChat()
 const { dialogs } = useI18n()
 
 const isACP = computed(() => providerID.value.startsWith('acp:'))
@@ -22,6 +22,7 @@ const acpAgent = computed(() => {
 const keyInput = ref('')
 const baseURLInput = ref(customBaseURL.value)
 const customModelInput = ref(customModelID.value)
+const customHeadersInput = ref(customHeaders.value)
 
 function save() {
   const key = keyInput.value.trim()
@@ -31,6 +32,9 @@ function save() {
   }
   if (providerDef.value.supportsCustomModel) {
     customModelID.value = customModelInput.value.trim()
+  }
+  if (providerDef.value.supportsCustomHeaders) {
+    customHeaders.value = customHeadersInput.value.trim()
   }
   setAPIKey(key)
   keyInput.value = ''
@@ -59,6 +63,16 @@ function save() {
         v-model="customModelInput"
         test-id="provider-custom-model"
         :placeholder="dialogs.modelIDPlaceholder"
+      />
+
+      <!-- Custom headers for compatible providers with gateway -->
+      <textarea
+        v-if="providerDef.supportsCustomHeaders"
+        v-model="customHeadersInput"
+        data-test-id="provider-custom-headers"
+        class="w-full rounded bg-input px-2 py-1.5 font-mono text-[10px] text-surface outline-none placeholder:text-muted/40"
+        rows="3"
+        :placeholder='{"X-My-Header": "value"}'
       />
 
       <AppInput

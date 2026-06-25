@@ -44,6 +44,7 @@ export const customAPIType = useLocalStorage<'completions' | 'responses'>(
   `${STORAGE_PREFIX}ai-api-type`,
   'completions'
 )
+export const customHeaders = useLocalStorage(`${STORAGE_PREFIX}ai-custom-headers`, '')
 export const maxOutputTokens = useLocalStorage(`${STORAGE_PREFIX}ai-max-output-tokens`, 16384)
 export const pexelsApiKey = useLocalStorage(`${STORAGE_PREFIX}pexels-api-key`, '')
 export const unsplashAccessKey = useLocalStorage(`${STORAGE_PREFIX}unsplash-access-key`, '')
@@ -97,4 +98,5 @@ export function registerAIChatEffects(markTransportDirty: () => void) {
   watch(customAPIType, markTransportDirty)
   watch(apiKey, markTransportDirty)
   watch(customBaseURL, markTransportDirty)
+  watch(customHeaders, markTransportDirty)
 }

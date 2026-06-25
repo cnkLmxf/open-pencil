@@ -6,6 +6,7 @@ import {
   apiKey,
   customAPIType,
   customBaseURL,
+  customHeaders,
   customModelID,
   isACPProvider,
   isConfigured,
@@ -33,6 +34,7 @@ const chatSession = createChatSessionManager({
   customModelID,
   customBaseURL,
   customAPIType,
+  customHeaders,
   maxOutputTokens,
   getActiveEditorStore
 })
@@ -55,6 +57,7 @@ export function useAIChat() {
     customBaseURL,
     customModelID,
     customAPIType,
+    customHeaders,
     maxOutputTokens,
     pexelsApiKey,
     unsplashAccessKey,

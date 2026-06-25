@@ -22,6 +22,7 @@ type ChatSessionOptions = {
   customModelID: Ref<string>
   customBaseURL: Ref<string>
   customAPIType: Ref<'completions' | 'responses'>
+  customHeaders: Ref<string>
   maxOutputTokens: Ref<number>
   getActiveEditorStore: () => EditorStore
 }
@@ -34,6 +35,7 @@ type ToolLoopTransportOptions = {
   customModelID: string
   customBaseURL: string
   customAPIType: 'completions' | 'responses'
+  customHeaders: string
   maxOutputTokens: number
 }
 
@@ -67,6 +69,7 @@ export function createToolLoopTransport({
   customModelID,
   customBaseURL,
   customAPIType,
+  customHeaders,
   maxOutputTokens
 }: ToolLoopTransportOptions) {
   const tools = createAITools(store)
@@ -82,7 +85,8 @@ export function createToolLoopTransport({
       modelID,
       customModelID,
       customBaseURL,
-      customAPIType
+      customAPIType,
+      customHeaders
     }),
     instructions: SYSTEM_PROMPT,
     tools,
@@ -123,6 +127,7 @@ export function createChatSessionManager({
   customModelID,
   customBaseURL,
   customAPIType,
+  customHeaders,
   maxOutputTokens,
   getActiveEditorStore
 }: ChatSessionOptions) {
@@ -160,6 +165,7 @@ export function createChatSessionManager({
       customModelID: customModelID.value,
       customBaseURL: customBaseURL.value,
       customAPIType: customAPIType.value,
+      customHeaders: customHeaders.value,
       maxOutputTokens: maxOutputTokens.value
     })
   }

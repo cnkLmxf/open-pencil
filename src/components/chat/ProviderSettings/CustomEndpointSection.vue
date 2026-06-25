@@ -48,5 +48,19 @@ async function loadModelSuggestions() {
         @change="ctx.save"
       />
     </ProviderSettingsField>
+
+    <ProviderSettingsField v-if="ctx.providerDef.supportsCustomHeaders" :label="dialogs.customHeaders">
+      <template #hint>
+        <span class="text-[9px] text-muted/60">{{ dialogs.customHeadersHint }}</span>
+      </template>
+      <textarea
+        v-model="ctx.customHeadersInput"
+        data-test-id="provider-settings-custom-headers"
+        class="w-full rounded bg-input px-2 py-1.5 font-mono text-[10px] text-surface outline-none placeholder:text-muted/40"
+        rows="3"
+        :placeholder='{"X-My-Header": "value"}'
+        @change="ctx.save"
+      />
+    </ProviderSettingsField>
   </template>
 </template>
