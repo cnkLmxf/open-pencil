@@ -12,6 +12,10 @@
     "updater:default",
     "process:default",
     {
+      "identifier": "http:default",
+      "allow": [{ "url": "http://**" }, { "url": "https://**" }]
+    },
+    {
       "identifier": "fs:allow-read-file",
       "allow": [{ "path": "**" }]
     },

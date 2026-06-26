@@ -7,6 +7,23 @@ import type { LanguageModel } from 'ai'
 
 import type { AIProviderID } from '@open-pencil/core/constants'
 
+import { isTauri } from '@/app/tauri/env'
+
+// In the packaged Tauri WebView, plain http:// requests are rejected by macOS App
+// Transport Security. Route those through the Tauri HTTP plugin, which performs the
+// request in the native layer and bypasses ATS. https:// keeps the default fetch so
+// streaming on the built-in providers is unaffected.
+function resolveFetch(baseURL: string): typeof globalThis.fetch | undefined {
+  if (!isTauri() || !baseURL.trim().toLowerCase().startsWith('http://')) return undefined
+  return (async (input, init) => {
+    const { fetch: tauriFetch } = await import('@tauri-apps/plugin-http')
+    return tauriFetch(
+      input as Parameters<typeof tauriFetch>[0],
+      init as Parameters<typeof tauriFetch>[1]
+    )
+  }) as typeof globalThis.fetch
+}
+
 export type ModelConfig = {
   providerID: AIProviderID
   apiKey: string
@@ -37,11 +54,11 @@ export function createLanguageModel(config: ModelConfig): LanguageModel {
       const parsed = JSON.parse(config.customHeaders.trim())
       if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
         customHeadersObj = Object.fromEntries(
-          Object.entries(parsed).filter(([, v]) => typeof v === 'string')
-        )
+          Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === 'string')
+        ) as Record<string, string>
       }
-    } catch {
-      // Invalid JSON — silently ignore, no custom headers applied
+    } catch (e) {
+      console.warn('Invalid customHeaders JSON, skipping:', e)
     }
   }
   const hasCustomHeaders = Object.keys(customHeadersObj).length > 0
@@ -91,6 +108,7 @@ export function createLanguageModel(config: ModelConfig): LanguageModel {
       const custom = createOpenAI({
         apiKey: config.apiKey,
         baseURL: config.customBaseURL,
+        fetch: resolveFetch(config.customBaseURL),
         ...(hasCustomHeaders && { headers: customHeadersObj })
       })
       return config.customAPIType === 'responses'
@@ -101,6 +119,7 @@ export function createLanguageModel(config: ModelConfig): LanguageModel {
       const custom = createAnthropic({
         apiKey: config.apiKey,
         baseURL: config.customBaseURL,
+        fetch: resolveFetch(config.customBaseURL),
         ...(hasCustomHeaders && { headers: customHeadersObj })
       })
       return custom(effectiveModelID)
